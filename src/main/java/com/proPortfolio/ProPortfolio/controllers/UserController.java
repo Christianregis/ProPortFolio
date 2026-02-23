@@ -1,5 +1,6 @@
 package com.proPortfolio.ProPortfolio.controllers;
 
+import com.proPortfolio.ProPortfolio.dto.UserDto;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,7 +37,12 @@ public class UserController{
     }
 
     @PostMapping
-    public ResponseEntity<User> saveUser(@RequestBody User user){
+    public ResponseEntity<User> saveUser(@RequestBody UserDto userDto){
+        User user = new User();
+        user.setUsername(userDto.getUsername());
+        user.setEmail(userDto.getEmail());
+        user.setPassword(user.getPassword());
+
         return ResponseEntity.ok(userService.createUser(user));
     }
 

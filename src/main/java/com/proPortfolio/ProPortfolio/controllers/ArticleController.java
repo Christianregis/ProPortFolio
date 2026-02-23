@@ -55,8 +55,18 @@ public class ArticleController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody Article newArticle){
-        return ResponseEntity.status(HttpStatus.OK).body(articleService.updateArticle(id, newArticle));
+    public ResponseEntity<Article> updateArticle(@PathVariable Long id, @RequestBody ArticleDto articleDto){
+        Article article = new Article();
+
+        User user = userService.findUserById(articleDto.getAuthorId()); // Permettra d'envoyer le userId pour la liasion avec l'article
+        Category category = categorieService.findCategoryById(articleDto.getCategoryId()); // Permettra d'envoyer le categoryId pour la liasion avec l'article
+
+        article.setTitle(articleDto.getTitle());
+        article.setContent(articleDto.getContent());
+        article.setStatus(articleDto.getStatus());
+        article.setCategory(category);
+        article.setAuthor(user);
+        return ResponseEntity.status(HttpStatus.OK).body(articleService.updateArticle(id, article));
     }
 
     @DeleteMapping("/{id}")

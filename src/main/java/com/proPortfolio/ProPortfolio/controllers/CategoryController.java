@@ -1,6 +1,8 @@
 package com.proPortfolio.ProPortfolio.controllers;
 
 import java.util.List;
+
+import com.proPortfolio.ProPortfolio.dto.CategoryDto;
 import com.proPortfolio.ProPortfolio.services.CategorieService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,12 +32,18 @@ public class CategoryController {
     }
 
     @PostMapping
-    public ResponseEntity<Category> saveCategory(@RequestBody Category category){
+    public ResponseEntity<Category> saveCategory(@RequestBody CategoryDto categoryDto){
+
+        Category category = new Category();
+        category.setName(categoryDto.getName());
         return ResponseEntity.ok(categorieService.createCategory(category));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Category> updateCategory(@PathVariable("id") Long id, @RequestBody Category newCategory){
+    public ResponseEntity<Category> updateCategory(@PathVariable("id") Long id, @RequestBody CategoryDto categoryDto){
+        Category newCategory = new Category();
+        newCategory.setName(categoryDto.getName());
+        
         return ResponseEntity.ok(categorieService.updateCategory(id, newCategory));
     }
 

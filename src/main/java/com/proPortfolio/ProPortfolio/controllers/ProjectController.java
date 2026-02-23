@@ -33,6 +33,12 @@ public class ProjectController {
 
     @PostMapping
     public ResponseEntity<Project> saveProject(@RequestBody ProjectDto projectDto){
+        Project project = putProjectInformation(projectDto);
+
+        return ResponseEntity.ok(projectService.saveProject(project));
+    }
+
+    private Project putProjectInformation(@RequestBody ProjectDto projectDto) {
         User user = userService.findUserById(projectDto.getAuthorId());
         Category category = categorieService.findCategoryById(projectDto.getCategoryId());
 
@@ -46,11 +52,26 @@ public class ProjectController {
         project.setAuthor(user);
         project.setCategory(category);
 
-        return ResponseEntity.ok(projectService.saveProject(project));
+        return project;
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Project> updateProject(@PathVariable Long id, @RequestBody ProjectDto projectDto){
+
+        Project project = putProjectInformation(projectDto);
+
+        return ResponseEntity.ok(projectService.updateProject(id, project));
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<Project> getProjectById(@PathVariable  Long id){
         return ResponseEntity.ok(projectService.findProjectById(id));
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<List<String>> deleteProject(@PathVariable Long id){
+        projectService.deleteProject(id);
+        return ResponseEntity.ok(List.of("message","Projet supprimee !"));
     }
 }
